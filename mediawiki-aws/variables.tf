@@ -42,12 +42,36 @@ variable "mediawiki_image" {
 
 variable "config_file" {
   description = "Name of MediaWiki configuration file"
-  type = string
-  default = "LocalSettings.php"
+  type        = string
+  default     = "LocalSettings.php"
 }
 
 variable "logo_file" {
   description = "Name of 135x135 MediaWiki logo file"
-  type = string
-  default = "wiki.png"
+  type        = string
+  default     = "wiki.png"
+}
+
+variable "enable_deletion_protection" {
+  description = "Enable RDS deletion protection"
+  type        = bool
+  default     = false
+}
+
+variable "skip_final_snapshot" {
+  description = "Toggle creation of DB snapshot when deleting DB. Used with deletion protection is off"
+  type        = bool
+  default     = true
+}
+
+variable "enable_guardduty" {
+  description = "Enable GuardDuty"
+  type        = bool
+  default     = false
+}
+
+variable "availability_zone_count" {
+  description = "Number of availability zones to use"
+  type        = number
+  default     = 2
 }
