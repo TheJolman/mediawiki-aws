@@ -71,13 +71,10 @@ resource "aws_ecs_task_definition" "mediawiki" {
         sourceVolume  = "mediawiki-settings"
         readOnly      = false
       },
-      # {
-      #   containerPath = "/var/www/html/imagesLink"
-      # }
       {
-        containerPath = "/var/www/html/images"
-        sourceVolume = "mediawiki-images"
-        readOnly = false
+        containerPath = "/var/www/html/imagesLink"
+        sourceVolume  = "mediawiki-images"
+        readOnly      = false
       }
     ]
 
