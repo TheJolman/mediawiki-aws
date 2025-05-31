@@ -28,10 +28,6 @@ resource "aws_ecs_task_definition" "mediawiki" {
   execution_role_arn       = aws_iam_role.ecs_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
 
-  #  TODO: configure images volume
-  # volume {
-  #   name = "wiki-images"
-  # }
   volume {
     name = "mediawiki-settings"
     efs_volume_configuration {
@@ -39,6 +35,18 @@ resource "aws_ecs_task_definition" "mediawiki" {
       transit_encryption = "ENABLED"
       authorization_config {
         access_point_id = aws_efs_access_point.mediawiki_settings.id
+        iam             = "ENABLED"
+      }
+    }
+  }
+
+  volume {
+    name = "mediawiki-images"
+    efs_volume_configuration {
+      file_system_id     = aws_efs_file_system.mediawiki_images.id
+      transit_encryption = "ENABLED"
+      authorization_config {
+        access_point_id = aws_efs_access_point.mediawiki_images.id
         iam             = "ENABLED"
       }
     }
@@ -59,13 +67,18 @@ resource "aws_ecs_task_definition" "mediawiki" {
 
     mountPoints = [
       {
-        containerPath = "/var/www/html/settings" # Mount point inside container
+        containerPath = "/var/www/html/" # Mount point inside container
         sourceVolume  = "mediawiki-settings"
         readOnly      = false
-      }
+      },
       # {
       #   containerPath = "/var/www/html/imagesLink"
       # }
+      {
+        containerPath = "/var/www/html/images"
+        sourceVolume = "mediawiki-images"
+        readOnly = false
+      }
     ]
 
     logConfiguration = {

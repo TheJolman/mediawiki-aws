@@ -2,7 +2,7 @@
 
 resource "aws_security_group" "alb" { # for load balancer
   name        = "${var.project_name}-alb-sg"
-  description = "Security group for ALB" # maybe change to something better
+  description = "Security group for ALB"
   vpc_id      = aws_vpc.main.id
 
   ingress { # inbound traffic

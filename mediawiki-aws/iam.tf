@@ -67,7 +67,10 @@ resource "aws_iam_policy" "ecs_efs_access" {
           "elasticfilesystem:ClientWrite",
           "elasticfilesystem:ClientRootAccess"
         ],
-        Resource = aws_efs_file_system.mediawiki_settings.arn
+        Resource = [
+          aws_efs_file_system.mediawiki_settings.arn,
+          aws_efs_file_system.mediawiki_images.arn
+        ]
       },
       {
         Effect = "Allow",
@@ -76,7 +79,10 @@ resource "aws_iam_policy" "ecs_efs_access" {
           "elasticfilesystem:ClientWrite",
           "elasticfilesystem:ClientRootAccess"
         ],
-        Resource = aws_efs_access_point.mediawiki_settings.arn
+        Resource = [
+          aws_efs_access_point.mediawiki_settings.arn,
+          aws_efs_file_system.mediawiki_images.arn
+        ]
       },
       {
         Effect = "Allow",
@@ -107,18 +113,23 @@ resource "aws_iam_policy" "ecs_s3_access" {
         Action = [
           "s3:GetObject",
           "s3:PutObject",
-          "s3:DeleteObject",
+          # "s3:DeleteObject",
           "s3:ListBucket"
         ],
         Resource = [
           aws_s3_bucket.wikiuploads.arn,
-          "${aws_s3_bucket.wikiuploads.arn}/*"
+          "${aws_s3_bucket.wikiuploads.arn}/images/*"
         ]
       },
       {
         "Effect": "Allow",
         "Action": "s3:GetObject",
         "Resource": "${aws_s3_bucket.wikiuploads.arn}/config/LocalSettings.php"
+      },
+      {
+        "Effect": "Allow",
+        "Action": "s3:GetObject",
+        "Resource": "${aws_s3_bucket.wikiuploads.arn}/config/var.logo_file.php"
       }
     ]
   })
