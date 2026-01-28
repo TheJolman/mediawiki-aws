@@ -17,7 +17,7 @@ This deployment creates:
 ## Prerequisites
 
 - AWS CLI configured with appropriate credentials
-- Terraform >= 1.0
+- Terraform
 - Docker Hub account (if using custom MediaWiki image)
 
 ## Quick Start
@@ -86,7 +86,7 @@ This deployment creates:
 | `skip_final_snapshot` | Skip snapshot creation when deleting DB | `true` | No |
 | `enable_guardduty` | Enable GuardDuty monitoring | `false` | No |
 
-## Example terraform.tfvars
+### Example terraform.tfvars
 
 ```hcl
 # Required variables
@@ -147,20 +147,6 @@ terraform destroy
 **Warning:** This will permanently delete all data including the database and S3 bucket contents.
 
 ## Troubleshooting
-
-### Common Issues
-
-1. **Service fails to start:**
-   - Check CloudWatch logs: `aws logs tail /ecs/mediawiki-app --follow`
-   - Verify S3 bucket has LocalSettings.php
-
-2. **Database connection errors:**
-   - Ensure security groups allow ECS → RDS communication
-   - Verify database credentials in terraform.tfvars
-
-3. **ALB health check failures:**
-   - MediaWiki needs LocalSettings.php to pass health checks
-   - Check ECS task health in AWS console
 
 ### Useful Commands
 
